@@ -13,11 +13,25 @@ function Article() {
   useEffect(() => {
     async function fetchArticleById(id) {
       try {
-        const data = await fetch(`https://dev.to/api/articles/${id}`);
+        const data = await fetch('https://publicde4bbd314df078af.stepzen.net/api/newsapp/__graphql',{
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            query: `{
+              article(id: "${id}"){
+                id
+                title
+                body_html
+              }
+            }`
+        })
+        });
         const result = await data.json();
 
         if (result) {
-          setArticle(result);
+          setArticle(result.data.article);
         }
       } catch (e) {
         console.log('Error', e.message);

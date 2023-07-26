@@ -36,13 +36,30 @@ function Home({ filter }) {
   useEffect(() => {
     const fetchArticles = async (filter = '') => {
       try {
+        // Change this request from REST to GraphSQL. Ignore the filter for now.
         const data = await fetch(
-          `https://dev.to/api/articles${filter ? `?tag=${filter}` : ''}`,
-        );
+          'https://publicde4bbd314df078af.stepzen.net/api/newsapp/__graphql', { 
+            method:  'POST',
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({ //JSON needs to be stringified
+            query: `
+            query {
+              articles{
+                id
+                title
+                user {
+                  name
+                }
+                description
+                created_at
+              }
+            }
+            `})
+        });
         const result = await data.json();
 
         if (result) {
-          setArticles(result);
+          setArticles(result.data.articles);
         }
       } catch (e) {
         console.log('Error', e.message);
