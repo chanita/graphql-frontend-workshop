@@ -19,13 +19,22 @@ function Article() {
             "content-type": "application/json",
           },
           body: JSON.stringify({
-            query: `{
-              article(id: "${id}"){
+            query: `query GetArticleById($id: String){
+              article(id: $id){
                 id
                 title
+                user {
+                  name
+                }
+                description
                 body_html
+                created_at
               }
-            }`
+            }`,
+            variables: {
+              "id": id
+            },
+            operationName: "GetArticleById"
         })
         });
         const result = await data.json();
