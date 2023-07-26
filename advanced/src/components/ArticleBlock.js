@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { GET_ARTICLES, UPVOTE_ARTICLE } from '../operations';
+import React from 'react';
 
 const labelStyle = {
   color: '#828282',
