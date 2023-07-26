@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { useQuery, gql } from '@apollo/client';
 
 const listStyle = {
   listStyle: 'none',
@@ -25,52 +26,31 @@ const titleStyle = {
 };
 
 function Home({ filter }) {
-  const [articles, setArticles] = useState([]);
-
-  // Reset articles when filter changes
-  useEffect(() => {
-    if (filter) setArticles([]);
-  }, [filter]);
-
-  // Fetch articles
-  useEffect(() => {
-    const fetchArticles = async (filter = '') => {
-      try {
-        // Change this request from REST to GraphSQL. Ignore the filter for now.
-        const data = await fetch(
-          'https://publicde4bbd314df078af.stepzen.net/api/newsapp/__graphql', { 
-            method:  'POST',
-            headers: { "Content-Type": "application/json"},
-            body: JSON.stringify({ //JSON needs to be stringified
-            query: `
-            query {
-              articles{
-                id
-                title
-                user {
-                  name
-                }
-                description
-                created_at
-              }
-            }
-            `})
-        });
-        const result = await data.json();
-
-        if (result) {
-          setArticles(result.data.articles);
+  const GET_ARTICLES = gql`
+    query GetArticles($filter: String){
+      articles(tag: $filter){
+        id
+        title
+        tags
+        user {
+          name
         }
-      } catch (e) {
-        console.log('Error', e.message);
+        description
+        created_at
       }
-    };
-
-    if (!articles.length) {
-      fetchArticles(filter);
     }
-  }, [articles, filter]);
+    `
+  const {data, loading, error} = useQuery(GET_ARTICLES, {
+    variables: { 
+      filter
+    },
+  })
+  
+  if (loading) return <p>loading</p>
+  if (error) return <p>error</p>
 
+  const { articles } = data
+  
   return (
     <ul style={listStyle}>
       {articles.length === 0 ? <li style={listItemStyle}>...</li> : null}
