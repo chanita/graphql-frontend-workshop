@@ -7,7 +7,7 @@ import './index.css';
 // Enter your Free StepZen API root URL here, either public (no signup)
 // or private (signup required, but secure and more performant)
 const client = new ApolloClient({
-  uri: 'https://YOUR_USERNAME.stepzen.net/api/newsapp/__graphql',
+  uri: 'https://publicde4bbd314df078af.stepzen.net/api/newsapp/__graphql',
   headers: {
     authorization: 'YOUR_STEPZEN_API_KEY',
   },

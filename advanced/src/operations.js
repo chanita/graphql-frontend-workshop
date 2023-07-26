@@ -26,9 +26,7 @@ export const GET_ARTICLE = gql`
 `;
 
 export const UPVOTE_ARTICLE = gql`
-  mutation UpvoteArticle($postId: Int!) {
-    upvoteArticle(postId: $postId) {
-      id
-    }
+  mutation UpvoteArticle($postId: String) {
+    upvoteArticle(postId: $postId)
   }
 `;
