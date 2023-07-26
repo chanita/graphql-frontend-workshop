@@ -20,7 +20,7 @@ function Article() {
           },
           body: JSON.stringify({
             query: `query GetArticleById($id: String){
-              article(id: $id){
+              article(id : $id){
                 id
                 title
                 user {

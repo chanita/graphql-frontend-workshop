@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery, gql } from '@apollo/client';
+import { useQuery, gql, useMutation } from '@apollo/client';
 
 const listStyle = {
   listStyle: 'none',
@@ -33,28 +33,37 @@ function Home({ filter }) {
         title
         tags
         user {
-          name
+          username
         }
         description
         created_at
+        upvotes
       }
     }
     `
-  const {data, loading, error} = useQuery(GET_ARTICLES, {
-    variables: { 
+
+  const UPVOTE_ARTICLE = gql`
+    mutation UpvoteArticleByID($postId: String){
+      upvoteArticle(postId: $postId)
+    }
+  `
+  const { data, loading, error } = useQuery(GET_ARTICLES, {
+    variables: {
       filter
     },
   })
-  
+
+  const [addUpvote, { loading: loadingMutation }] = useMutation(UPVOTE_ARTICLE)
+
   if (loading) return <p>loading</p>
   if (error) return <p>error</p>
 
   const { articles } = data
-  
+
   return (
     <ul style={listStyle}>
       {articles.length === 0 ? <li style={listItemStyle}>...</li> : null}
-      {articles.map(({ id, title, description, user }, index) => (
+      {articles.map(({ id, title, description, user, upvotes }, index) => (
         <li key={id} style={listItemStyle}>
           <span style={labelStyle}>{index + 1}. </span>
 
@@ -72,6 +81,13 @@ function Home({ filter }) {
               <Link to={`/articles/${id}`}>More...</Link>
             </small>
           </p>
+          <p>upvotes {upvotes}</p>
+          <button onClick={() =>
+            addUpvote({ 
+              variables: { postId: id.toString() }, 
+              refetchQueries: [GET_ARTICLES] 
+            })
+          }>Up</button>
         </li>
       ))}
     </ul>
