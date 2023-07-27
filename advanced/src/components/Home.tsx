@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import ArticleBlock from './ArticleBlock';
 import { GET_ARTICLES } from '../operations';
+import { Article, GetArticlesQuery, GetArticlesQueryVariables } from 'src/gql/graphql';
 
 const listStyle = {
   listStyle: 'none',
@@ -17,24 +18,24 @@ type HomeProps = {
   filter: string;
 }
 
-type ArticleType = {
-  //fields for Article from GraphQL
-  id: string;
-  title: string;
-  description: string;
-  user: UserType;
-  upvotes: number;
-}
+// type ArticleType = {
+//   //fields for Article from GraphQL
+//   id: string;
+//   title: string;
+//   description: string;
+//   user: UserType;
+//   upvotes: number;
+// }
 
-type UserType = {
-  username: string;
-}
+// type UserType = {
+//   username: string;
+// }
 
 function Home({ filter }: HomeProps) {
   const [page, setPage] = useState(1);
 
-  const { loading, error, data } = useQuery(GET_ARTICLES, {
-    variables: { tag: filter, page },
+  const { loading, error, data } = useQuery<GetArticlesQuery, GetArticlesQueryVariables>(GET_ARTICLES, {
+    variables: { tag: filter, page, isAuthenticated: false },
   });
 
   if (loading) return 'Loading...';
@@ -45,8 +46,8 @@ function Home({ filter }: HomeProps) {
   return (
     <>
       <ul style={listStyle}>
-        {data.articles.length === 0 ? <li style={listItemStyle}>...</li> : null}
-        {data.articles.map((article: ArticleType, index: number) => (
+        {data?.articles?.length === 0 ? <li style={listItemStyle}>...</li> : null}
+        {data?.articles?.map((article: Article, index: number) => (
           <ArticleBlock key={article.id} index={index} {...article} />
         ))}
       </ul>

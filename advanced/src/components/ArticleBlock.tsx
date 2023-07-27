@@ -20,7 +20,7 @@ const listItemStyle = {
   margin: '0 5px',
 };
 
-function ArticleBlock({ id, title, description, user, upvotes, index }) {
+function ArticleBlock({ id, title, description, user, upvotes, index }: any) {
   const [upvoteArticle, { data, loading, error }] = useMutation(
     UPVOTE_ARTICLE,
     {

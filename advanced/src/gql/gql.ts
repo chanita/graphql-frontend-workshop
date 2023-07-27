@@ -13,7 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n  query GetArticles($tag: String, $page: Int) {\n    articles(tag: $tag, page: $page) {\n      id\n      title\n      description\n      upvotes\n      user {\n        username\n      }\n    }\n  }\n": types.GetArticlesDocument,
+    "\n  query GetArticles($tag: String, $page: Int, $isAuthenticated: Boolean!) {\n    articles(tag: $tag, page: $page) {\n      id\n      title\n      description\n      upvotes @include(if: $isAuthenticated)\n      user {\n        username\n      }\n    }\n  }\n": types.GetArticlesDocument,
     "\n  query GetArticleById($id: String!) {\n    article(id: $id) {\n      id\n      title\n      description\n      body_html\n    }\n  }\n": types.GetArticleByIdDocument,
     "\n  mutation UpvoteArticle($postId: String) {\n    upvoteArticle(postId: $postId)\n  }\n": types.UpvoteArticleDocument,
 };
@@ -35,7 +35,7 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetArticles($tag: String, $page: Int) {\n    articles(tag: $tag, page: $page) {\n      id\n      title\n      description\n      upvotes\n      user {\n        username\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetArticles($tag: String, $page: Int) {\n    articles(tag: $tag, page: $page) {\n      id\n      title\n      description\n      upvotes\n      user {\n        username\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  query GetArticles($tag: String, $page: Int, $isAuthenticated: Boolean!) {\n    articles(tag: $tag, page: $page) {\n      id\n      title\n      description\n      upvotes @include(if: $isAuthenticated)\n      user {\n        username\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetArticles($tag: String, $page: Int, $isAuthenticated: Boolean!) {\n    articles(tag: $tag, page: $page) {\n      id\n      title\n      description\n      upvotes @include(if: $isAuthenticated)\n      user {\n        username\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
