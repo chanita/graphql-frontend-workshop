@@ -1,12 +1,12 @@
 import { gql } from '@apollo/client';
 
 export const GET_ARTICLES = gql`
-  query GetArticles($tag: String, $page: Int) {
+  query GetArticles($tag: String, $page: Int, $isAuthenticated: Boolean!) {
     articles(tag: $tag, page: $page) {
       id
       title
       description
-      upvotes
+      upvotes @include(if: $isAuthenticated)
       user {
         username
       }
